@@ -9,9 +9,9 @@
 #include "Final_scooter.h"
 
 /*  GLOBALS     */
-   extern uint16_t X_ADC;
-   extern uint16_t Y_ADC;
-   extern uint16_t Z_ADC;
+   volatile uint16_t X_Accelerometer_ADC;
+   volatile uint16_t Y_Accelerometer_ADC;
+   volatile uint16_t Z_Accelerometer_ADC;
 
    extern uint16_t NADC_Temperature;
 
@@ -73,9 +73,9 @@ void ADC_Accelerometer_Config(){
 
 void ADC14_IRQHandler(){
     if(ADC14->IFGR0 & ADC14_IFGR0_IFG2){
-         X_ADC = ADC14->MEM[0];
-         Y_ADC = ADC14->MEM[1];
-         Z_ADC = ADC14->MEM[2];
+         X_Accelerometer_ADC = ADC14->MEM[0];
+         Y_Accelerometer_ADC = ADC14->MEM[1];
+         Z_Accelerometer_ADC = ADC14->MEM[2];
     }
 
 }

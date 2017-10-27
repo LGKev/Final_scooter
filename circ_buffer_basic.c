@@ -161,8 +161,8 @@ uint16_t currentSize(CircBuf_t **buf){
 }
 
 void print(CircBuf_t *buf){
-    UART_putchar_n("******************", 18);
-    UART_putchar(13);
+    UART_send_n_bytes("******************");
+    UART_send_byte(13);
 
 
     if(buf->num_items ==0)return;
@@ -185,51 +185,12 @@ void print(CircBuf_t *buf){
 
  /*================= Format ========== =====================================*/
 
-        char indexString[2];
-
-        itoa(numberPrinted, indexString, 10);
-
-        UART_putchar_n(indexString, strlen(indexString));
-        UART_putchar_n(": ", 2);
-
-
-        dataRead = *oldTail;
-
  /*================= Convert ADC to Temperatures =====================================*/
 
-     float  dataRead_float_C =  Temperature_from_voltage_Celsius(dataRead, 1.2, 14);
-     float dataRead_float_F = dataRead_float_C*(9/5)+32.0;
-     float dataRead_float_Kelvin = dataRead_float_C + 273.0;
+
 
 
  /*================= Convert data to ascii =====================================*/
-        char dataString_C[10];
-         char dataString_F[10];
-         char dataString_K[10];
-
-        ftoa(dataRead_float_C, dataString_C, 3);
-        ftoa(dataRead_float_F, dataString_F, 3);
-        ftoa(dataRead_float_Kelvin, dataString_K, 3);
-
-
-
-        UART_putchar_n(dataString_C, strlen(dataString_C));
-        //add units: C
-        UART_putchar_n(" °C  ", strlen(" °C  "));
-
-        UART_putchar_n(dataString_K, strlen(dataString_K));
-        UART_putchar_n(" K  ", strlen(" K  "));
-        //add units: K
-        UART_putchar_n(dataString_F, strlen(dataString_F));
-        UART_putchar_n(" °F  ", strlen(" °F  "));
-        //add units: F
-
-
-
-
-
-
-        UART_putchar_n(" ",1);
 
   /*================= end data to ascii =====================================*/
 
@@ -244,9 +205,9 @@ void print(CircBuf_t *buf){
         }
         //grab data and print it.
 
-        UART_putchar(13);
+        UART_send_byte(13);
     }
-    UART_putchar_n("******************", 18);
+    UART_send_n_bytes("******************");
 
 }
 

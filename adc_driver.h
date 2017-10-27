@@ -18,7 +18,7 @@
  *
  *
  * */
-void ADC_CONFIG_Accelerometer(void);
+void ADC_Accelerometer_Config(void);
 
 /*      @name: ADC14_IRQHandler
  *      @brief: Handler for the ADC conversions. Triggers whenever data is converted and stored in Mem[x]

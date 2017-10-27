@@ -14,6 +14,7 @@ UART.obj: ../GPIO.h
 UART.obj: ../UART.h
 UART.obj: C:/Users/kwat1/Documents/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/string.h
 UART.obj: C:/Users/kwat1/Documents/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/linkage.h
+UART.obj: ../Clock.h
 
 ../UART.c: 
 C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/msp.h: 
@@ -29,3 +30,4 @@ C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/system_msp432p401r.h:
 ../UART.h: 
 C:/Users/kwat1/Documents/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/string.h: 
 C:/Users/kwat1/Documents/ccsv7/tools/compiler/ti-cgt-arm_16.9.4.LTS/include/linkage.h: 
+../Clock.h: 

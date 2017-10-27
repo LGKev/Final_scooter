@@ -16,7 +16,7 @@
    extern uint16_t NADC_Temperature;
 
 
-void ADC_CONFIG_Accelerometer(){
+void ADC_Accelerometer_Config(){
 
     /*
      * Set up the pins for the accelerometer on the Booster Pack MK II

@@ -25,16 +25,40 @@
  *
  *
  * */
+
+/*===============   Globals    ======================*/
+//:TODO find a better place to declare buffer
+
+CircBuf_t myBuffer;
+CircBuf_t * myBufferPTR = &myBuffer;
+
+uint32_t global_number_Of_Beam_Breaks;
+uint8_t Calculate_Distance =0; //flag to calculate
+float total_distance_cummulative = 0.0;
+
+/*=====================++===========================*/
+
+
 void main(void)
 {
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
+
 
 	   Timer_A0_Config();
 	   RGB_Config();
 	   Left_Right_Button_Config();
 	   UART_Config();
 
+	    initialize_Circ_Buffer(&myBufferPTR, 200);
 
+	    __enable_irq();
 
 
 }
+
+//Conversions
+void reverse(char str[], int len);
+int intToStr(int value, char str[], int length);
+char itoa(int value, char str[], int base);          //Integer to ASCII (should return ascii)
+char ftoa(float f, char str[], int point);         //Float to ASCII (should return ascii)
+

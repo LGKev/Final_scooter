@@ -9,6 +9,7 @@ CMD_SRCS += \
 ../msp432p401r.cmd 
 
 C_SRCS += \
+../Clock.c \
 ../Final_scooter.c \
 ../GPIO.c \
 ../Timer.c \
@@ -20,6 +21,7 @@ C_SRCS += \
 ../system_msp432p401r.c 
 
 C_DEPS += \
+./Clock.d \
 ./Final_scooter.d \
 ./GPIO.d \
 ./Timer.d \
@@ -31,6 +33,7 @@ C_DEPS += \
 ./system_msp432p401r.d 
 
 OBJS += \
+./Clock.obj \
 ./Final_scooter.obj \
 ./GPIO.obj \
 ./Timer.obj \
@@ -42,6 +45,7 @@ OBJS += \
 ./system_msp432p401r.obj 
 
 OBJS__QUOTED += \
+"Clock.obj" \
 "Final_scooter.obj" \
 "GPIO.obj" \
 "Timer.obj" \
@@ -53,6 +57,7 @@ OBJS__QUOTED += \
 "system_msp432p401r.obj" 
 
 C_DEPS__QUOTED += \
+"Clock.d" \
 "Final_scooter.d" \
 "GPIO.d" \
 "Timer.d" \
@@ -64,6 +69,7 @@ C_DEPS__QUOTED += \
 "system_msp432p401r.d" 
 
 C_SRCS__QUOTED += \
+"../Clock.c" \
 "../Final_scooter.c" \
 "../GPIO.c" \
 "../Timer.c" \

@@ -13,6 +13,8 @@ C_SRCS += \
 ../GPIO.c \
 ../Timer.c \
 ../UART.c \
+../adc_driver.c \
+../circ_buffer_basic.c \
 ../main.c \
 ../startup_msp432p401r_ccs.c \
 ../system_msp432p401r.c 
@@ -22,6 +24,8 @@ C_DEPS += \
 ./GPIO.d \
 ./Timer.d \
 ./UART.d \
+./adc_driver.d \
+./circ_buffer_basic.d \
 ./main.d \
 ./startup_msp432p401r_ccs.d \
 ./system_msp432p401r.d 
@@ -31,6 +35,8 @@ OBJS += \
 ./GPIO.obj \
 ./Timer.obj \
 ./UART.obj \
+./adc_driver.obj \
+./circ_buffer_basic.obj \
 ./main.obj \
 ./startup_msp432p401r_ccs.obj \
 ./system_msp432p401r.obj 
@@ -40,6 +46,8 @@ OBJS__QUOTED += \
 "GPIO.obj" \
 "Timer.obj" \
 "UART.obj" \
+"adc_driver.obj" \
+"circ_buffer_basic.obj" \
 "main.obj" \
 "startup_msp432p401r_ccs.obj" \
 "system_msp432p401r.obj" 
@@ -49,6 +57,8 @@ C_DEPS__QUOTED += \
 "GPIO.d" \
 "Timer.d" \
 "UART.d" \
+"adc_driver.d" \
+"circ_buffer_basic.d" \
 "main.d" \
 "startup_msp432p401r_ccs.d" \
 "system_msp432p401r.d" 
@@ -58,6 +68,8 @@ C_SRCS__QUOTED += \
 "../GPIO.c" \
 "../Timer.c" \
 "../UART.c" \
+"../adc_driver.c" \
+"../circ_buffer_basic.c" \
 "../main.c" \
 "../startup_msp432p401r_ccs.c" \
 "../system_msp432p401r.c" 

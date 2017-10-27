@@ -5,22 +5,22 @@
  *      Author: kk
  */
 
-#include "circular_buffer.h"
 #include <stdlib.h>
-#include "lab3.h"
 #include "uart.h"
-
+#include "circ_buffer_basic.h"
+#include "string.h"
+#include "Final_scooter.h"
 extern uint8_t Calculate_Stats;
 
 
-void initialize_Circ_Buffer(CircBuf_t **myBase, uint8_t _length)
+void initialize_Circ_Buffer(CircBuf_t **myBase, uint16_t _length)
 {
 
     //tests
 
     if (*myBase != NULL)
     {
-        uint8_t *_buffer = (uint8_t *) malloc(_length * sizeof(uint8_t));
+        uint16_t *_buffer = (uint16_t *) malloc(_length * sizeof(uint16_t));
 
         if (_buffer != NULL)
         {
@@ -42,15 +42,11 @@ void initialize_Circ_Buffer(CircBuf_t **myBase, uint8_t _length)
     }
 }
 
-void add_To_Buffer(CircBuf_t **buf, uint8_t item)
+void add_To_Buffer(CircBuf_t **buf, uint16_t item)
 {
     if (*buf != NULL)
     {
-        //Check to see if enter or full, if so set the CalculateStats flag to 1.
-        if(item == 10){
-            Calculate_Stats = 1;
-            return;
-        }
+
 
 
         if (is_Circ_Buf_Empty(buf))
@@ -78,23 +74,21 @@ void add_To_Buffer(CircBuf_t **buf, uint8_t item)
             else{
              // Case 3: Full circular buffer, do not overwrite?
                 //TODO: what happens when full?
-                return;
+
+                P1OUT |= BIT0; //turn on full led.
+
             }
         }
-       if(is_Circ_Buf_Full(buf)){
-           Calculate_Stats = 1;
-           return;
-       }
     }
 }
 
-int8_t remove_From_Buffer(CircBuf_t ** buf)
+uint16_t remove_From_Buffer(CircBuf_t ** buf)
 {
     if (*buf != NULL)
     {
         if (is_Circ_Buf_Empty(buf)) //Case 1: Empty
         {
-            return -1;
+            return 53;
         }
         else{
             uint8_t oldTail = *(*buf)->tail;
@@ -137,10 +131,11 @@ int8_t remove_From_Buffer(CircBuf_t ** buf)
  *
  * */
 
-int8_t is_Circ_Buf_Full(CircBuf_t **buf)
+uint16_t is_Circ_Buf_Full(CircBuf_t **buf)
 {
     if ((*buf)->num_items == (*buf)->length)
     {
+       // P1OUT |= BIT0; //turn on full led.
         return 1;
     }
     else
@@ -149,7 +144,7 @@ int8_t is_Circ_Buf_Full(CircBuf_t **buf)
     }
 }
 
-int8_t is_Circ_Buf_Empty(CircBuf_t **buf)
+uint16_t is_Circ_Buf_Empty(CircBuf_t **buf)
 {
     if ((*buf)->num_items == 0)
     {
@@ -166,17 +161,79 @@ uint16_t currentSize(CircBuf_t **buf){
 }
 
 void print(CircBuf_t *buf){
+    UART_putchar_n("******************", 18);
+    UART_putchar(13);
+
+
     if(buf->num_items ==0)return;
 
-    uint8_t *oldTail = buf->tail;
+    uint16_t *oldTail = buf->tail;
     uint16_t numberPrinted =0;
     uint16_t oldTailPosition = buf->tailPosition;
-    uint8_t dataRead;
+    uint16_t dataRead;
+
+
+
+
+
+
+
+
+
 
     for(numberPrinted =0; numberPrinted < buf->num_items; numberPrinted++){
 
+ /*================= Format ========== =====================================*/
+
+        char indexString[2];
+
+        itoa(numberPrinted, indexString, 10);
+
+        UART_putchar_n(indexString, strlen(indexString));
+        UART_putchar_n(": ", 2);
+
+
         dataRead = *oldTail;
-        UART_putchar(dataRead);
+
+ /*================= Convert ADC to Temperatures =====================================*/
+
+     float  dataRead_float_C =  Temperature_from_voltage_Celsius(dataRead, 1.2, 14);
+     float dataRead_float_F = dataRead_float_C*(9/5)+32.0;
+     float dataRead_float_Kelvin = dataRead_float_C + 273.0;
+
+
+ /*================= Convert data to ascii =====================================*/
+        char dataString_C[10];
+         char dataString_F[10];
+         char dataString_K[10];
+
+        ftoa(dataRead_float_C, dataString_C, 3);
+        ftoa(dataRead_float_F, dataString_F, 3);
+        ftoa(dataRead_float_Kelvin, dataString_K, 3);
+
+
+
+        UART_putchar_n(dataString_C, strlen(dataString_C));
+        //add units: C
+        UART_putchar_n(" °C  ", strlen(" °C  "));
+
+        UART_putchar_n(dataString_K, strlen(dataString_K));
+        UART_putchar_n(" K  ", strlen(" K  "));
+        //add units: K
+        UART_putchar_n(dataString_F, strlen(dataString_F));
+        UART_putchar_n(" °F  ", strlen(" °F  "));
+        //add units: F
+
+
+
+
+
+
+        UART_putchar_n(" ",1);
+
+  /*================= end data to ascii =====================================*/
+
+       // UART_putchar(dataRead);
         oldTail++;//move the pointer
         oldTailPosition++;
 
@@ -187,17 +244,19 @@ void print(CircBuf_t *buf){
         }
         //grab data and print it.
 
-
+        UART_putchar(13);
     }
+    UART_putchar_n("******************", 18);
 
 }
 
 void clear_Buffer(CircBuf_t ** buf){
+    P1OUT &=~BIT0; //turn off full led
     //check to see if valid
-    uint8_t * destination = (*buf)->baseConst + ((*buf)->length) *sizeof(uint8_t);
+    uint16_t * destination = (*buf)->baseConst + ((*buf)->length) *sizeof(uint16_t);
 
         //clear buffer
-        uint8_t *clear =   (*buf)->tail;
+    uint16_t *clear =   (*buf)->tail;
         int i;
         uint8_t value = (*buf)->num_items;
         for( i=0; i<value; i++){

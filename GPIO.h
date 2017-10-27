@@ -34,17 +34,29 @@
 /*
  *      @name: UART_Pin_Config
  *      @brief: Configure port 3 RX and TX pins for easy access to headers.
- *          TX: Pin 3 UCA2
- *          RX: Pin 2 UCA2
+ *          TX: port 3  Pin 3 UCA2
+ *          RX: port 3  Pin 2 UCA2
  *      Call this inside of UART.C to configure the pins for UART
  *
  *      @param: input none
  *      @param: output none
  */
- void UART_PIN_Config(){}
+ void UART_RX_TX_Config();
 
 
+ /*     @name: IR_Beam_Break_Config()
+  *     @brief: Configure port for the IR Beam Break
+  *        Photo Diode Pin: Port 2 pin 5
+  *        LED IR Pin: wired to 5v
+  *     Also enables interrupts for PORT 2
+  * */
+ void IR_Beam_Break_Config();
 
 
+ /*
+  *     @name: RGB_Config
+  *     @brief: configures the pins for the RGB led
+  * */
+ void RGB_Config();
 
 #endif /* GPIO_H_ */

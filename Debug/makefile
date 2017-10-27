@@ -14,6 +14,8 @@ ORDERED_OBJS += \
 "./GPIO.obj" \
 "./Timer.obj" \
 "./UART.obj" \
+"./adc_driver.obj" \
+"./circ_buffer_basic.obj" \
 "./main.obj" \
 "./startup_msp432p401r_ccs.obj" \
 "./system_msp432p401r.obj" \
@@ -159,8 +161,8 @@ Final_scooter.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "Final_scooter.obj" "GPIO.obj" "Timer.obj" "UART.obj" "main.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" 
-	-$(RM) "Final_scooter.d" "GPIO.d" "Timer.d" "UART.d" "main.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" 
+	-$(RM) "Final_scooter.obj" "GPIO.obj" "Timer.obj" "UART.obj" "adc_driver.obj" "circ_buffer_basic.obj" "main.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" 
+	-$(RM) "Final_scooter.d" "GPIO.d" "Timer.d" "UART.d" "adc_driver.d" "circ_buffer_basic.d" "main.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

@@ -7,6 +7,7 @@
 #include "msp.h"
 #include "GPIO.h"
 #include "UART.h"
+#include "string.h"
 
 
 void UART_Config(){
@@ -30,3 +31,44 @@ void UART_Config(){
     NVIC_EnableIRQ(EUSCIA2_IRQn);
 
 }
+
+void UART_send_byte(uint8_t tx_data){
+    while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
+     EUSCI_A0->TXBUF = tx_data;             // be sure data is in ASCII
+}
+
+void UART_send_n_bytes(uint8_t *string){
+    uint32_t index =0;
+    uint32_t length = strlen(string); //automatically calculate the length
+     for(index = 0; index <length ; index++){
+         UART_send_byte(string[index]);
+     }
+}
+
+
+/* ISR Handler for RX and TX */
+extern void EUSCIA2_IRQHandler(){
+    uint16_t delay;
+
+    if(EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG){
+
+               EUSCI_A0->IFG &= ~EUSCI_A_IFG_RXIFG;//clear the flag.
+             //:TODO need to implement buffer
+             //  add_To_Buffer(&myBufferPTR, EUSCI_A2->RXBUF);
+
+
+
+
+               /*visual output to confirm RX */
+                       P2OUT ^= BLUE_LED_UART_VISUAL; //vis
+                      for(delay =0; delay<200; delay++);
+                      P2OUT ^= BLUE_LED_UART_VISUAL;
+               /*end of visual output */
+}
+
+
+    if(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG){
+
+    }
+}
+

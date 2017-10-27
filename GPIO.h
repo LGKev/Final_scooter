@@ -4,6 +4,9 @@
  *  Created on: Oct 27, 2017
  *      Author: kwat1
  */
+#define BLUE_LED_UART_VISUAL        (0b010) /* Pin Reserved for UART RX Received*/
+
+
 
 /*
  *  Please adhere to the C Standard programming standard
@@ -39,6 +42,8 @@
  *      @param: output none
  */
  void UART_PIN_Config(){}
+
+
 
 
 

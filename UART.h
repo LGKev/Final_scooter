@@ -36,9 +36,13 @@ void UART_send_byte(uint8_t data);
 /* @name: UART_send_n_bytes
  * @brief: Sends a string to UART TX pins
  * @param: string: The input is an array of characters or simply a string with "double quotes"
- * @param length: length of the string, can use strlen() to find length
- * */
-void UART_send_n_bytes(uint8_t *string, uint32_t length);
+ */
+void UART_send_n_bytes(uint8_t *string);
 
+/* @name: EUSCIA2_IRQHanlder()
+ * @brief: The interrupt handler is in the UART.c and is configured for RX and TX interrupts
+ * TODO: Need to configure RX Buffer and interrupt to trigger modes
+ * */
+void EUSCIA2_IRQHandler();
 
 #endif /* UART_H_ */

@@ -59,4 +59,21 @@
   * */
  void RGB_Config();
 
+
+ /*     @name: Lef_Right_Button_Config
+  *     @brief: configures the pins for the left and right buttons
+  *         enables the port interrupt for the left and right buttons
+  *
+  * */
+ void Left_Right_Button_Config();
+
+ /*     @name: Port1_IQRHandler
+  *     @brief: interrupt triggered based on the input from the Left and Right Buttons
+  *     TODO: nothing configured, but interrupts are enabled.
+  *
+  */
+ void PORT1_IRQHandler();
+
+
+
 #endif /* GPIO_H_ */

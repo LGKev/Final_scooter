@@ -38,3 +38,37 @@ void RGB_Config(){
     P2->OUT |= (BIT0 | BIT1 | BIT2 ); //HIGH
     P2->OUT &= ~(BIT0 | BIT1 | BIT2 ); //LOW
 }
+
+void Left_Right_Button_Config(){
+    /* Right button configure */
+        P1->SEL0 &= ~BIT1;
+        P1->SEL1 &= ~BIT1;
+        P1->DIR &= ~BIT1; //amazing that this even works. its a fluke. it is set as output right now.
+        P1->REN |= BIT1;
+        P1->OUT |= BIT1;
+        P1->IFG &= ~BIT1; //interrupt flag to be cleared first
+        P1->IES |= BIT1; //high to low
+        P1->IE |= BIT1;
+
+        /* LEFT button configure */
+        P1->SEL0 &= ~BIT4;
+        P1->SEL1 &= ~BIT4;
+        P1->DIR &= ~BIT4;
+        P1->REN |= BIT4;
+        P1->OUT |= BIT4;
+        P1->IFG &= ~BIT4; //interrupt flag to be cleared first
+        P1->IES |= BIT4; //high to low
+        P1->IE |= BIT4;
+}
+
+/*   Port interrupts ISRs   */
+void PORT1_IRQHandler(){
+    if (P1IFG & BIT1){
+            P1->IFG &= ~BIT1;
+            //:TODO configure actions based on button presss
+        }
+    if (P1IFG & BIT4){
+            P1->IFG &= ~BIT4;
+            //:TODO configure actions based on button presss
+        }
+}

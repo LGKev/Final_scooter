@@ -14,7 +14,7 @@ void UART_Config(){
     /* Pin Configuration
      * configures pin3.2 and pin3.3 for RX/TX
      */
-    UART_PIN_Config();
+    UART_RX_TX_Config();
 
 /* Rest of Configuration for UART*/
     EUSCI_A2->CTLW0 |= EUSCI_A_CTLW0_SWRST; //reset by setting to 1.

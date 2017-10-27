@@ -6,6 +6,8 @@
  */
 
 #include "Timer.h"
+#include "msp.h"
+
 
 void Timer_A0_Config(){
         __disable_irq(); //start a critical section

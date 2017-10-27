@@ -33,6 +33,8 @@
  *      @brief: Configure port 3 RX and TX pins for easy access to headers.
  *          TX: Pin 3 UCA2
  *          RX: Pin 2 UCA2
+ *      Call this inside of UART.C to configure the pins for UART
+ *
  *      @param: input none
  *      @param: output none
  */

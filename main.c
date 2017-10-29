@@ -22,7 +22,9 @@
  *          Determine direction
  *
  *
- *
+ *          TEST Beam Break Interrupt
+ *          TEST Button Interrupts
+ *          Test Distance Calculation
  *
  * */
 
@@ -33,7 +35,7 @@ CircBuf_t myBuffer;
 CircBuf_t * myBufferPTR = &myBuffer;
 
 uint32_t global_number_Of_Beam_Breaks;
-uint8_t Calculate_Distance =0; //flag to calculate
+uint8_t Calculate_Distance = 0; //flag to calculate
 float total_distance_cummulative = 0.0;
 
 /*=====================++===========================*/
@@ -44,21 +46,17 @@ void main(void)
 	WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer
 
 
-	   Timer_A0_Config();
+
 	   RGB_Config();
 	   Left_Right_Button_Config();
 	   UART_Config();
+	   Timer_A0_Config(); //enabling timer with vector table forces port 1 interrupt to fail.
 
-	    initialize_Circ_Buffer(&myBufferPTR, 200);
+//	    initialize_Circ_Buffer(&myBufferPTR, 200);
 
 	    __enable_irq();
 
-
+	    while(1);
 }
 
-//Conversions
-void reverse(char str[], int len);
-int intToStr(int value, char str[], int length);
-char itoa(int value, char str[], int base);          //Integer to ASCII (should return ascii)
-char ftoa(float f, char str[], int point);         //Float to ASCII (should return ascii)
 

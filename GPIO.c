@@ -59,16 +59,26 @@ void Left_Right_Button_Config(){
         P1->IFG &= ~BIT4; //interrupt flag to be cleared first
         P1->IES |= BIT4; //high to low
         P1->IE |= BIT4;
+
+
+        /* Enable Interrupts in the NVIC */
+        NVIC_EnableIRQ(PORT1_IRQn);
+
 }
 
 /*   Port interrupts ISRs   */
 void PORT1_IRQHandler(){
+    uint8_t required_ISR_Delay = 0;
+    for(required_ISR_Delay = 0; required_ISR_Delay < 200; required_ISR_Delay++);
     if (P1IFG & BIT1){
             P1->IFG &= ~BIT1;
             //:TODO configure actions based on button presss
+            TIMER_A0->CCR[0] = 4700;
+
         }
     if (P1IFG & BIT4){
             P1->IFG &= ~BIT4;
             //:TODO configure actions based on button presss
+            TIMER_A0->CCR[0] = 12000;
         }
 }

@@ -38,8 +38,8 @@ void UART_Config(){
 }
 
 void UART_send_byte(uint8_t tx_data){
-    while(!(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG));
-     EUSCI_A0->TXBUF = tx_data;             // be sure data is in ASCII
+    while(!(EUSCI_A2->IFG & EUSCI_A_IFG_TXIFG));
+     EUSCI_A2->TXBUF = tx_data;             // be sure data is in ASCII
 }
 
 void UART_send_n_bytes(uint8_t *string){

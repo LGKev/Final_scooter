@@ -56,7 +56,11 @@ void main(void)
 
 	    __enable_irq();
 
-	    while(1);
+	    while(1){
+
+
+	        UART_send_n_bytes("tesT");
+	    }
 
 
 

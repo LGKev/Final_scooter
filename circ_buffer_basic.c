@@ -185,12 +185,15 @@ void print(CircBuf_t *buf){
 
  /*================= Format ========== =====================================*/
 
- /*================= Convert ADC to Temperatures =====================================*/
 
 
 
 
  /*================= Convert data to ascii =====================================*/
+        char number_in_ascii[10];
+        itoa(*oldTail, number_in_ascii, 10);
+
+        UART_send_n_bytes(number_in_ascii);
 
   /*================= end data to ascii =====================================*/
 

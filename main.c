@@ -26,17 +26,28 @@
  *          TEST Button Interrupts
  *          Test Distance Calculation
  *
- * */
-
+ *
+/*===================================================*/
 /*===============   Globals    ======================*/
-//:TODO find a better place to declare buffer
+/*===================================================*/
 
+/*====== Globals Related to Buffer  =======*/
 CircBuf_t myBuffer;
 CircBuf_t * myBufferPTR = &myBuffer;
+uint8_t dump_Buffer =0;
 
+//:TODO find a better place to declare buffer
+
+
+
+
+
+/*====== Globals Related to Distance/Velocity  =======*/
 uint32_t global_number_Of_Beam_Breaks;
 uint8_t Calculate_Distance = 0; //flag to calculate
 float total_distance_cummulative = 0.0;
+
+
 
 /*=====================++===========================*/
 
@@ -52,12 +63,18 @@ void main(void)
 	   UART_Config();
 	   Timer_A0_Config(); //enabling timer with vector table forces port 1 interrupt to fail.
 
-//	    initialize_Circ_Buffer(&myBufferPTR, 200);
+    initialize_Circ_Buffer(&myBufferPTR, 200);
+
+    add_To_Buffer(&myBufferPTR, 101);
 
 	    __enable_irq();
 
 	    while(1){
 
+	        if(dump_Buffer == 1){
+	            print(myBufferPTR);
+	            dump_Buffer = 0;
+	        }
 
 	        UART_send_n_bytes("tesT");
 	    }

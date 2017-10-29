@@ -7,6 +7,9 @@
 #include "GPIO.h"
 #include "msp.h"
 
+/*====== Globals Related to Buffer  =======*/
+extern uint8_t dump_Buffer;
+
  void UART_RX_TX_Config(){
      //RX SETUP
          P3SEL0 |= BIT2;
@@ -74,6 +77,7 @@ void PORT1_IRQHandler(){
             P1->IFG &= ~BIT1;
             //:TODO configure actions based on button presss
             TIMER_A0->CCR[0] = 4700;
+            dump_Buffer = 1;
 
         }
     if (P1IFG & BIT4){

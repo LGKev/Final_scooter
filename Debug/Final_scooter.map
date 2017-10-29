@@ -1,7 +1,11 @@
 ******************************************************************************
                   TI ARM Linker PC v16.9.4                     
 ******************************************************************************
+<<<<<<< HEAD
 >> Linked Sun Oct 29 10:21:07 2017
+=======
+>> Linked Sun Oct 29 09:53:26 2017
+>>>>>>> b01eff6558591cfa183a7ebf9bac69f6eb1bd049
 
 OUTPUT FILE NAME:   <Final_scooter.out>
 ENTRY POINT SYMBOL: "_c_int00"  address: 00001e39

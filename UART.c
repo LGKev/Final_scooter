@@ -23,9 +23,9 @@ void UART_Config(){
 
 /* Rest of Configuration for UART*/
     EUSCI_A2->CTLW0 |= EUSCI_A_CTLW0_SWRST; //reset by setting to 1.
+    EUSCI_A2->IFG = 0b0;                                            // Clear any flags WHILE RESET IS 1
 
-    EUSCI_A2->IFG = 0;                                            // Clear any flags
-    EUSCI_A2->IE |= EUSCI_A_IFG_TXIFG | EUSCI_A_IFG_RXIFG;        // set up interrupt enable for both Rx and Tx.
+
     EUSCI_A2->CTLW0 |= EUSCI_A_CTLW0_SSEL__SMCLK;                 //frame parameter , enable interrupt on the RX
     EUSCI_A2->BRW = 26;                                           //baud rate, so baud rate set at 26 with other settings will result in a rate of 9600
     // UCOS16 = 1,          UCbRx = 26;              UCBRF = 0 ;              UCBRSx = 0xB6
@@ -33,6 +33,10 @@ void UART_Config(){
     EUSCI_A2->MCTLW|= ((0xB600)) ;                                //from table 22.3.13
     // CLEAR UCSWRST
     EUSCI_A2->CTLW0 &= ~EUSCI_A_CTLW0_SWRST;
+
+
+    EUSCI_A2->IE |=  EUSCI_A_IFG_RXIFG;        // set up interrupt enable for both Rx and Tx. ENABLE INTERRUPTS AFTER RESET
+
     NVIC_EnableIRQ(EUSCIA2_IRQn);
 
 }
@@ -129,9 +133,10 @@ void UART_send_n_bytes(uint8_t *string){
 extern void EUSCIA2_IRQHandler(){
     uint16_t delay;
 
-    if(EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG){
+    if(EUSCI_A2->IFG & EUSCI_A_IFG_RXIFG){
 
-               EUSCI_A0->IFG &= ~EUSCI_A_IFG_RXIFG;//clear the flag.
+
+               EUSCI_A2->IFG &= ~EUSCI_A_IFG_RXIFG;//clear the flag.
              //:TODO need to implement buffer
              //  add_To_Buffer(&myBufferPTR, EUSCI_A2->RXBUF);
 
@@ -139,6 +144,7 @@ extern void EUSCIA2_IRQHandler(){
 
 
                /*visual output to confirm RX */
+                       P2OUT = 0;
                        P2OUT ^= BLUE_LED_UART_VISUAL; //vis
                       for(delay =0; delay<200; delay++);
                       P2OUT ^= BLUE_LED_UART_VISUAL;
@@ -146,7 +152,7 @@ extern void EUSCIA2_IRQHandler(){
 }
 
 
-    if(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG){
+    if(EUSCI_A2->IFG & EUSCI_A_IFG_TXIFG){
 
     }
 }

@@ -27,7 +27,7 @@ extern uint8_t dump_Buffer;
         P2->REN |= BIT5;
         P2->OUT &= ~BIT5;
         P2->IFG &= ~BIT5; //interrupt flag to be cleared first
-        P1->IES &= ~BIT5; //high to low trigger
+        P2->IES &= ~BIT5; //high to low trigger
         P2->IE |= BIT5;
         P2DIR &= ~BIT5; //PIN 5 INPUT
         NVIC_EnableIRQ(PORT2_IRQn);

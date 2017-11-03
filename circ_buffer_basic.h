@@ -31,6 +31,13 @@ void initialize_Circ_Buffer(CircBuf_t **buf, uint16_t _length);
 /*
  * Adds an item to the HEAD of the circular Buffer
  * Increments the number of items.
+ *
+ *
+ *  TODO: redo ASSUME THERE IS A STRING
+ *      add the string to the buffer
+ *      require a new line character for the string so its formatted.
+ *
+ *  assuming each itme is an ascii value so the vlaue is between 0 and like 255 but its small uint8_t
  * */
 void add_To_Buffer(CircBuf_t **buf, uint16_t item);
 
@@ -40,6 +47,10 @@ void add_To_Buffer(CircBuf_t **buf, uint16_t item);
  * Increments tail position
  * Increment tail pointer
  * Decrements number of items
+ *
+ *
+ *  TODO: assume there is a string that needs to be printed.
+ *
  * */
 uint16_t  remove_From_Buffer(CircBuf_t **buf);
 

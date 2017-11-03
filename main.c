@@ -51,6 +51,17 @@ float total_distance_cummulative = 0.0;
 
 /*=====================++===========================*/
 
+uint8_t * foo(uint32_t ** ptr){
+    (*(*ptr)) += 1048576;
+    (*ptr)++;
+    return ((uint8_t *)(*ptr));
+}
+
+
+/*
+ * TODO: we need to assign pins for the accerlometer to work with the pins on the booster pack. should be the same as
+ * lab 4
+ * */
 
 void main(void)
 {
@@ -58,8 +69,12 @@ void main(void)
 
 
 
+
+
+
 	   RGB_Config();
 	   Left_Right_Button_Config();
+
 	   UART_Config();
 	   Timer_A0_Config(); //enabling timer with vector table forces port 1 interrupt to fail.
 
@@ -74,9 +89,9 @@ void main(void)
 	        if(dump_Buffer == 1){
 	            print(myBufferPTR);
 	            dump_Buffer = 0;
-	        }
 
-	        UART_send_n_bytes("tesT");
+
+	        }
 	    }
 
 

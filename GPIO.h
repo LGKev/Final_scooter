@@ -52,6 +52,11 @@
   * */
  void IR_Beam_Break_Config();
 
+/*
+ *  @name: IR_Beam_Break_Config_JW
+ *  @brief: sets up the ir beam break for pin 6
+ *  */
+ void IR_Beam_Break_Config_JW();
 
  /*
   *     @name: RGB_Config

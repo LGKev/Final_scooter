@@ -6,6 +6,8 @@
  */
 #include "GPIO.h"
 #include "msp.h"
+#include "Systick.h"
+
 
 /*====== Globals Related to Buffer  =======*/
 extern uint8_t dump_Buffer;
@@ -29,35 +31,43 @@ extern volatile uint32_t seconds;
 //        P2SEL0 &= ~BIT5;
 //        P2SEL1 &= ~BIT5;
 //        //set up for pull down
-//        P2->REN |= BIT;
+//        P2->REN |= BIT5;
 //        P2->OUT &= ~BIT5;
 //        P2->IFG &= ~BIT5; //interrupt flag to be cleared first
 //        P2->IES &= ~BIT5; //high to low trigger
 //        P2->IE |= BIT5;
 //        P2DIR &= ~BIT5; //PIN 5 INPUT
 
-     P2SEL0 &= ~BIT7;
-     P2SEL1 &= ~BIT7;
+     /* I'm comparing setups between port 1 and port 2,
+      * the buttons are a little different orders than the IR
+      *
+      * */
+     P2->SEL0 &= ~BIT7;
+     P2->SEL1 &= ~BIT7;
      //set up for pull down
+     P2->DIR &= ~BIT7; //PIN 7 INPUT //this was set late, maybe it has to be set FIRST? -> vs DIR directly maybe that was it too
      P2->REN |= BIT7;
      P2->OUT &= ~BIT7;
-     P2->IFG &= ~BIT7; //interrupt flag to be cleared first
-     P2->IES &= ~BIT7; //high to low trigger
+     P2->IFG = 0x0;//~BIT7; //interrupt flag to be cleared first
+     P2->IES |= BIT7; //high to low trigger, jordan has this as low to HIGH set 1.
      P2->IE |= BIT7;
-     P2DIR &= ~BIT7; //PIN 5 INPUT
-        NVIC_EnableIRQ(PORT2_IRQn);
+       NVIC_EnableIRQ(PORT2_IRQn);
  }
 
+ void IR_Beam_Break_Config_JW(){
+     P1->SEL0 = 0x00;
+       P1->SEL1 = 0x00;
+       P1->DIR |= BIT0;
+       P1->OUT = 0x00;
 
+       /*BIT 7 configuration*/
+       P1->DIR &= ~(BIT6);
+       P1->IES |= BIT6;
+       P1->IE |= BIT6;
+       P1->IFG = 0x00;
+       NVIC_EnableIRQ(PORT1_IRQn);
 
-
-void RGB_Config(){
-    P2->SEL0 &= ~(BIT0 | BIT1 | BIT2 );
-    P2->SEL1 &= ~(BIT0 | BIT1 | BIT2 );
-    P2->DIR |= (BIT0 | BIT1 | BIT2 );
-    P2->OUT |= (BIT0 | BIT1 | BIT2 ); //HIGH
-    P2->OUT &= ~(BIT0 | BIT1 | BIT2 ); //LOW
-}
+ }
 
 void Left_Right_Button_Config(){
     /* Right button configure */
@@ -83,7 +93,15 @@ void Left_Right_Button_Config(){
 
         /* Enable Interrupts in the NVIC */
         NVIC_EnableIRQ(PORT1_IRQn);
+}
 
+void RGB_Config(){
+
+    P2->SEL0 &= ~(BIT0 | BIT1 | BIT2 );
+    P2->SEL1 &= ~(BIT0 | BIT1 | BIT2 );
+    P2->DIR |= (BIT0 | BIT1 | BIT2 );
+    P2->OUT |= (BIT0 | BIT1 | BIT2 ); //HIGH
+    P2->OUT &= ~(BIT0 | BIT1 | BIT2 ); //LOW
 }
 
 /*   Port interrupts ISRs   */
@@ -102,7 +120,12 @@ void PORT1_IRQHandler(){
             //:TODO configure actions based on button presss
             TIMER_A0->CCR[0] = 12000;
         }
-
+    if(P1->IFG & BIT6){
+           count_int++;
+           systick_int++; //interrupt count from the ir beam break
+           P1->OUT ^= BIT0;
+           P1->IFG &= ~BIT6;
+          }
 
 }
 
@@ -110,8 +133,7 @@ void PORT2_IRQHandler(){
     if (P2IFG & BIT7){ // IR beam break
           count_int++;
           systick_int++; //interrupt count from the ir beam break
-          P1->OUT ^= BIT0; //visual output
-          //P2->IFG &= ~BIT5;
-          P2->IFG = 0;
+         // P1->OUT ^= BIT0; //visual output
+       P2->IFG &= ~BIT7;
       }
 }

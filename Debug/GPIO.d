@@ -11,6 +11,7 @@ GPIO.obj: C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/msp432p401r_classi
 GPIO.obj: C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/CMSIS/core_cm4.h
 GPIO.obj: C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/CMSIS/cmsis_compiler.h
 GPIO.obj: C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/system_msp432p401r.h
+GPIO.obj: ../Systick.h
 
 ../GPIO.c: 
 ../GPIO.h: 
@@ -23,3 +24,4 @@ C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/msp432p401r_classic.h:
 C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/CMSIS/core_cm4.h: 
 C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/CMSIS/cmsis_compiler.h: 
 C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/system_msp432p401r.h: 
+../Systick.h: 

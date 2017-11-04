@@ -80,12 +80,13 @@ void main(void)
 
 
 
-	   RGB_Config();
-	   Left_Right_Button_Config();
+	 //  RGB_Config();
+	  // Left_Right_Button_Config();
 
-	   IR_Beam_Break_Config();
+	   //IR_Beam_Break_Config();
+	IR_Beam_Break_Config_JW();
 
-	   UART_Config();
+	//   UART_Config();
 	  // Timer_A0_Config(); //enabling timer with vector table forces port 1 interrupt to fail.
 
 	    config_systick(); //enable timing for velocity

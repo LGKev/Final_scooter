@@ -9,6 +9,11 @@
 
 /*====== Globals Related to Buffer  =======*/
 extern uint8_t dump_Buffer;
+extern volatile uint16_t systickflag;
+extern volatile uint32_t count_int;
+extern volatile uint16_t systick_int;
+extern volatile uint32_t seconds;
+
 
  void UART_RX_TX_Config(){
      //RX SETUP
@@ -21,17 +26,29 @@ extern uint8_t dump_Buffer;
  }
 
  void IR_Beam_Break_Config(){
-        P2SEL0 &= ~BIT5;
-        P2SEL1 &= ~BIT5;
-        //set up for pull down
-        P2->REN |= BIT5;
-        P2->OUT &= ~BIT5;
-        P2->IFG &= ~BIT5; //interrupt flag to be cleared first
-        P2->IES &= ~BIT5; //high to low trigger
-        P2->IE |= BIT5;
-        P2DIR &= ~BIT5; //PIN 5 INPUT
+//        P2SEL0 &= ~BIT5;
+//        P2SEL1 &= ~BIT5;
+//        //set up for pull down
+//        P2->REN |= BIT;
+//        P2->OUT &= ~BIT5;
+//        P2->IFG &= ~BIT5; //interrupt flag to be cleared first
+//        P2->IES &= ~BIT5; //high to low trigger
+//        P2->IE |= BIT5;
+//        P2DIR &= ~BIT5; //PIN 5 INPUT
+
+     P2SEL0 &= ~BIT7;
+     P2SEL1 &= ~BIT7;
+     //set up for pull down
+     P2->REN |= BIT7;
+     P2->OUT &= ~BIT7;
+     P2->IFG &= ~BIT7; //interrupt flag to be cleared first
+     P2->IES &= ~BIT7; //high to low trigger
+     P2->IE |= BIT7;
+     P2DIR &= ~BIT7; //PIN 5 INPUT
         NVIC_EnableIRQ(PORT2_IRQn);
  }
+
+
 
 
 void RGB_Config(){
@@ -85,4 +102,16 @@ void PORT1_IRQHandler(){
             //:TODO configure actions based on button presss
             TIMER_A0->CCR[0] = 12000;
         }
+
+
+}
+
+void PORT2_IRQHandler(){
+    if (P2IFG & BIT7){ // IR beam break
+          count_int++;
+          systick_int++; //interrupt count from the ir beam break
+          P1->OUT ^= BIT0; //visual output
+          //P2->IFG &= ~BIT5;
+          P2->IFG = 0;
+      }
 }

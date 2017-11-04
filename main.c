@@ -5,6 +5,7 @@
 #include "circ_buffer_basic.h"
 #include "Final_scooter.h"
 #include "UART.h"
+#include "Systick.h"
 
 
 /**
@@ -43,9 +44,16 @@ uint8_t dump_Buffer =0;
 
 
 /*====== Globals Related to Distance/Velocity  =======*/
-uint32_t global_number_Of_Beam_Breaks;
-uint8_t Calculate_Distance = 0; //flag to calculate
-float total_distance_cummulative = 0.0;
+//uint32_t global_number_Of_Beam_Breaks;
+//uint8_t Calculate_Distance = 0; //flag to calculate
+//float total_distance_cummulative = 0.0;
+volatile uint16_t systickflag=0;
+volatile uint32_t count_int=0;
+volatile uint16_t systick_int=0;
+float distance=0;
+float velocity=0;
+volatile uint32_t seconds=0; // counted with in the ISR for systick
+
 
 
 
@@ -75,23 +83,30 @@ void main(void)
 	   RGB_Config();
 	   Left_Right_Button_Config();
 
+	   IR_Beam_Break_Config();
+
 	   UART_Config();
-	   Timer_A0_Config(); //enabling timer with vector table forces port 1 interrupt to fail.
+	  // Timer_A0_Config(); //enabling timer with vector table forces port 1 interrupt to fail.
 
-    initialize_Circ_Buffer(&myBufferPTR, 200);
-
-    add_To_Buffer(&myBufferPTR, 101);
+	    config_systick(); //enable timing for velocity
 
 	    __enable_irq();
 
 	    while(1){
 
-	        if(dump_Buffer == 1){
-	            print(myBufferPTR);
-	            dump_Buffer = 0;
+//	        if(dump_Buffer == 1){
+//	            print(myBufferPTR);
+//	            dump_Buffer = 0;
+//
+//
+//	        }
 
-
-	        }
+	        if(systickflag==1){
+	                 velocity=(((systick_int)*(0.3078761/14))/systickflag);
+	                 distance=((count_int)*(0.3078761/14)); //m
+	                 systick_int=0;
+	                 systickflag=0;
+	               }
 	    }
 
 

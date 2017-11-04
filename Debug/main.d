@@ -16,6 +16,7 @@ main.obj: ../Timer.h
 main.obj: ../circ_buffer_basic.h
 main.obj: ../Final_scooter.h
 main.obj: ../UART.h
+main.obj: ../Systick.h
 
 ../main.c: 
 C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/msp.h: 
@@ -33,3 +34,4 @@ C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/system_msp432p401r.h:
 ../circ_buffer_basic.h: 
 ../Final_scooter.h: 
 ../UART.h: 
+../Systick.h: 

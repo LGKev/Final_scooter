@@ -12,6 +12,7 @@ C_SRCS += \
 ../Clock.c \
 ../Final_scooter.c \
 ../GPIO.c \
+../Systick.c \
 ../Timer.c \
 ../UART.c \
 ../adc_driver.c \
@@ -24,6 +25,7 @@ C_DEPS += \
 ./Clock.d \
 ./Final_scooter.d \
 ./GPIO.d \
+./Systick.d \
 ./Timer.d \
 ./UART.d \
 ./adc_driver.d \
@@ -36,6 +38,7 @@ OBJS += \
 ./Clock.obj \
 ./Final_scooter.obj \
 ./GPIO.obj \
+./Systick.obj \
 ./Timer.obj \
 ./UART.obj \
 ./adc_driver.obj \
@@ -48,6 +51,7 @@ OBJS__QUOTED += \
 "Clock.obj" \
 "Final_scooter.obj" \
 "GPIO.obj" \
+"Systick.obj" \
 "Timer.obj" \
 "UART.obj" \
 "adc_driver.obj" \
@@ -60,6 +64,7 @@ C_DEPS__QUOTED += \
 "Clock.d" \
 "Final_scooter.d" \
 "GPIO.d" \
+"Systick.d" \
 "Timer.d" \
 "UART.d" \
 "adc_driver.d" \
@@ -72,6 +77,7 @@ C_SRCS__QUOTED += \
 "../Clock.c" \
 "../Final_scooter.c" \
 "../GPIO.c" \
+"../Systick.c" \
 "../Timer.c" \
 "../UART.c" \
 "../adc_driver.c" \

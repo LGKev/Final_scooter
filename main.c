@@ -130,11 +130,6 @@ void main(void)
 
 
         if( printout_Klee == 1){
-
-            UART_send_n_bytes("we are: ");
-            UART_send_byte(48+direction);
-            UART_send_byte(13);
-
             Escooter_Printout();
             printout_Klee = 0;
         }

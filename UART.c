@@ -181,12 +181,12 @@ void reverse(uint8_t length)
 
  char ftoa(float value)           //float to string function
 {
-     if(value == 0){
-          ascii_backwards_float_fraction_portion[0] = '0';
-          ascii_backwards_float_fraction_portion[1] = '.';
-          ascii_backwards_float_fraction_portion[2] = '0';
-          ascii_backwards_float_fraction_portion[3] = '0';
-          ascii_backwards_float_fraction_portion[4] = '0';
+     if(value == 0.0){
+         ascii_backwards_float_int_portion[0] ='0';
+     ascii_backwards_float_int_portion[1] = '.';
+     ascii_backwards_float_int_portion[2] = '0';//termination
+     ascii_backwards_float_int_portion[3] = '\0';
+          return;
      }
 
      uint8_t number_of_integer_digits = 0; //use this to keep track for reversal

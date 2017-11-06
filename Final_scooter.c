@@ -45,9 +45,6 @@ void movement_Detection(){
     forward = 0;
     moving = 0;
 
-
-         velocity=(((systick_int)*(0.3078761/14))/systickflag);
-          distance=((count_int)*(0.3078761/14)); //m
           if(velocity==0){
               //Set an interrupt flag that show show the escooter is stopped
                moving =0;

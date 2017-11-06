@@ -26,64 +26,14 @@ extern uint32_t seconds; // counted with in the ISR for systick
 extern char ascii_backwards[10];
 extern char ascii_string_from_INT_STRING[10];
 
+extern char ascii_string_FLOAT_Int_Portion[10]; //Integer portion of the float conversion
+extern char ascii_string_FLOAT_fraction_Portion[10]; //Fractional portion of the float conversion
+
+extern char ascii_backwards_float_int_portion[10];
+extern char ascii_backwards_float_fraction_portion[10];
+
+
 /*===========================================================*/
-
-void UART_Config2(){
-    /*  Steps for Setting up UART Table 22.3.1
-     *      Set UCSWRST
-     *      Initialize all registers with UCSWRT = 1
-     *      Configure Ports
-     *      Clear UCSWST with software, aka clear that 1.
-     *      Enable interrupts for UCRxie and UCTxie
-     *
-     *
-     * Resets as all 0's so only the clock sources is the
-     *  that need to be changed will change.
-     *
-     *  "Frame parameters" means the parity, stop bits, etc. but cuz all reset as 0's
-     *  no worries.
-     * */
-
-    //Set up pins.
-        //Pin 2 is the RX           pin 3 is the TX
-        //RX SETUP
-        P1SEL0 |= BIT2;
-        P1SEL1 &= ~BIT2;
-
-        //TX SETUP
-        P1SEL0 |= BIT3;
-        P1SEL1 &= ~BIT3;
-
-
-        // UART must be in reset mode to configure
-        EUSCI_A0->CTLW0 |= EUSCI_A_CTLW0_SWRST; //reset by setting to 1.
-
-
-        EUSCI_A0->IFG = 0b0; //CLEAR FLAGS WHILE RESET 1.
-
-
-
-
-        EUSCI_A0->CTLW0 |= EUSCI_A_CTLW0_SSEL__SMCLK; //frame parameter , enable interrupt on the RX
-        //baud rate clock is 4 Mhz
-        //what register is UCBR? it needs to be set as 26 is that the word one?
-        EUSCI_A0->BRW = 26; //baud rate, so baud rate set at 26 with other settings will result in a rate of 9600
-
-
-        // UCOS16 = 1,          UCbRx = 26;              UCBRF = 0 ;              UCBRSx = 0xB6
-        EUSCI_A0->MCTLW|=  (EUSCI_A_MCTLW_OS16); //from table 22.3.13
-
-        EUSCI_A0->MCTLW|= ((0xB600)) ;//| (EUSCI_A_MCTLW_OS16); //from table 22.3.13
-
-
-        // CLEAR UCSWRST
-        EUSCI_A0->CTLW0 &= ~EUSCI_A_CTLW0_SWRST;
-
-        //set up interrupt
-           EUSCI_A0->IE |= UCRXIE ;//BIT1 | EUSCI_A_IFG_RXIFG; // set up interrupt enable for both Rx and Tx.
-
-           NVIC_EnableIRQ(EUSCIA0_IRQn);
-}
 
 void UART_Config(){
     /* Pin Configuration
@@ -135,7 +85,6 @@ void Escooter_Printout(){
 
     intToStr((int)distance, 10);
 
-
     /* -----------------------------  Distance Print Out   ----------------------------------*/
     /* --------------------------------------------------------------------------------------*/
     UART_send_n_bytes("Distance Traveled:  ");
@@ -143,10 +92,14 @@ void Escooter_Printout(){
     UART_send_n_bytes(" meters");
     UART_send_byte(13);
 
+
+    ftoa(63.78);
+
+
     /* -----------------------------  Velocity Print Out   ----------------------------------*/
     /* --------------------------------------------------------------------------------------*/
     UART_send_n_bytes("Instantaneous Velocity: ");
-    UART_send_n_bytes(ascii_velocity);
+    UART_send_n_bytes(ascii_backwards_float_int_portion);
     UART_send_n_bytes(" meters/seconds");
     UART_send_byte(13);
 
@@ -221,46 +174,32 @@ void reverse(uint8_t length)
     return ascii_string_from_INT_STRING;
 }
 
- char itoa (int value, char str[], int base)           //integer to string function
+
+
+ char ftoa(float value)           //float to string function
 {
-    int  i = 0;
-    int sign;
+     __disable_irq();
+     uint32_t value_int = (int)value;
 
-    if ((sign = value) < 0){        //What to do if values is negative
-        value = -value;         //make value positive so we can work with
-    }
+     uint32_t value_fractional =( value - value_int ) * 1000; //3 decimal place precision
 
-    do{
-        str[i++] = value % base + '0';
-    }while ((value /= base) > 0);
+     uint8_t index = 0;
+   while(value_int != 0){
+       ascii_backwards_float_int_portion[index] = value_int%10 + '0';
+       index++;
+       value_int = value_int / 10;
+   }
+   //its zero now, so now we need to add a point
+       ascii_backwards_float_int_portion[index] = '.'; //add decimal //TODO: might be off by 1 place.
+       index++;
+       while(value_fractional !=0){
+           ascii_backwards_float_int_portion[index] = value_fractional % 10 + '0';
+           index++;
+           value_fractional = value_fractional / 10;
+       }
+       ascii_backwards_float_int_portion[index] = '\0'; //don't you dare not terminate the string
 
-    if (sign < 0){
-        str[i++] = '-';
-    }
-    str[i] = '\0';
-    reverse(i);
-
-}
-
- char ftoa(float f, int afterpoint)           //float to string function
-{
-
-//    int ipart = (int)f;
-//
-//    float fpart = f - (float)ipart;
-//
-//    int i = intToStr(ipart, str, 0);
-//
-//    if (afterpoint != 0)
-//    {
-//        str[i] = '.';
-//
-//        fpart = fpart * pow(10,afterpoint);
-//
-//        intToStr((int)fpart, str + i + 1, afterpoint);
-//    }
-
-    return 'a';
+       __enable_irq();
 }
 
 /*============================================================================*/

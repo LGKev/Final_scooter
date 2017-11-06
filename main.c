@@ -30,11 +30,18 @@
 /*===============   Globals    ======================*/
 /*===================================================*/
 
-/*====== Globals Related to Asccii  =======*/
+/*====== Globals Related to Asccii Conversions  =======*/
 volatile char ascii_backwards[10];
 volatile char ascii_string_from_INT_STRING[10];
+volatile char ascii_string_FLOAT_Int_Portion[10]; //Integer portion of the float conversion
+volatile char ascii_string_FLOAT_fraction_Portion[10]; //Fractional portion of the float conversion
 
 
+volatile char ascii_backwards_float_int_portion[10];
+volatile char ascii_backwards_float_fraction_portion[10];
+
+volatile char ascii_backwards_float_int_portion[10];
+volatile char ascii_backwards_float_fraction_portion[10];
 
 //:TODO find a better place to declare buffer
 
@@ -47,8 +54,8 @@ volatile uint32_t count_int = 0;
 volatile uint16_t systick_int = 0;
 volatile uint32_t seconds = 0; // counted with in the ISR for systick
 
-volatile float distance = 44.44;
-volatile float velocity = 53.00;
+volatile float distance = 0;
+volatile float velocity = 0;
 volatile uint16_t direction = 0;
 volatile uint16_t moving = 0;
 
@@ -88,7 +95,6 @@ void main(void)
     //IR_Beam_Break_Config_JW();
 
      UART_Config();
-    //UART_Config2();
 
 
     Timer_A0_Config(); //enabling timer with vector table forces port 1 interrupt to fail.
@@ -100,10 +106,12 @@ void main(void)
     P1SEL0 &= ~BIT0;
            P1SEL1 &= ~BIT0;
            P1->DIR |= BIT0;
+
            P1->OUT |= BIT0;
     while (1)
     {
 
+        movement_Detection();
 
 
 
@@ -113,6 +121,7 @@ void main(void)
 //            NVIC_DisableIRQ(systick);
 //            NVIC_DisableIRQ(Adc);
             velocity = (((systick_int) * (0.3078761 / 14)) / systickflag);
+//            velocity = 53;
             distance = ((count_int) * (0.3078761 / 14)); //m
             systick_int = 0;
             systickflag = 0;
@@ -123,7 +132,6 @@ void main(void)
 
         if( printout_Klee == 1){
 
-          //  movement_Detection();
             UART_send_n_bytes("we are: ");
             UART_send_byte(48+direction);
             UART_send_byte(13);

@@ -60,7 +60,7 @@ void Escooter_Printout();
 void reverse(uint8_t length);
 char intToStr(int value, int length);
 char itoa(int value, char str[], int base);          //Integer to ASCII (should return ascii)
-char ftoa(float f, int point);         //Float to ASCII (should return ascii)
+char ftoa(float f);         //Float to ASCII (should return ascii)
 
 
 

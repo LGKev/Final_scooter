@@ -178,6 +178,17 @@ void reverse(uint8_t length)
 
  char ftoa(float value)           //float to string function
 {
+//     if(value == 0){
+//          ascii_backwards_float_fraction_portion[0] = '0';
+//          ascii_backwards_float_fraction_portion[1] = '.';
+//          ascii_backwards_float_fraction_portion[2] = '0';
+//          ascii_backwards_float_fraction_portion[3] = '0';
+//          ascii_backwards_float_fraction_portion[4] = '0';
+//     }
+
+     uint8_t number_of_integer_digits = 0; //use this to keep track for reversal
+     uint8_t reversal_array[10];
+
      __disable_irq();
      uint32_t value_int = (int)value;
 
@@ -185,10 +196,20 @@ void reverse(uint8_t length)
 
      uint8_t index = 0;
    while(value_int != 0){
-       ascii_backwards_float_int_portion[index] = value_int%10 + '0';
+       reversal_array[index] = value_int%10 + '0';
        index++;
+       number_of_integer_digits++;
        value_int = value_int / 10;
    }
+   //now we have the integer portion it needs to be swapped
+   uint8_t index_for_reversal = 0;
+   while(number_of_integer_digits != 0){
+       ascii_backwards_float_int_portion[number_of_integer_digits-1] = reversal_array[index_for_reversal];
+       index_for_reversal++;
+       number_of_integer_digits--;
+   }
+
+
    //its zero now, so now we need to add a point
        ascii_backwards_float_int_portion[index] = '.'; //add decimal //TODO: might be off by 1 place.
        index++;

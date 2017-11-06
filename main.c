@@ -31,14 +31,6 @@
 /*===================================================*/
 
 /*====== Globals Related to Asccii Conversions  =======*/
-volatile char ascii_backwards[10];
-volatile char ascii_string_from_INT_STRING[10];
-volatile char ascii_string_FLOAT_Int_Portion[10]; //Integer portion of the float conversion
-volatile char ascii_string_FLOAT_fraction_Portion[10]; //Fractional portion of the float conversion
-
-
-volatile char ascii_backwards_float_int_portion[10];
-volatile char ascii_backwards_float_fraction_portion[10];
 
 volatile char ascii_backwards_float_int_portion[10];
 volatile char ascii_backwards_float_fraction_portion[10];

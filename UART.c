@@ -23,12 +23,6 @@ extern uint8_t ascii_velocity[10];         //creates an ascii string representat
 extern uint8_t printout_Klee;
 extern uint32_t seconds; // counted with in the ISR for systick
 
-extern char ascii_backwards[10];
-extern char ascii_string_from_INT_STRING[10];
-
-extern char ascii_string_FLOAT_Int_Portion[10]; //Integer portion of the float conversion
-extern char ascii_string_FLOAT_fraction_Portion[10]; //Fractional portion of the float conversion
-
 extern char ascii_backwards_float_int_portion[10];
 extern char ascii_backwards_float_fraction_portion[10];
 
@@ -137,47 +131,7 @@ void Escooter_Printout(){
 
 
 /*======================       Convert to ASCIII            ==============================*/
-/* @name: reverse
- * @brief: takes in a global: ascii_backwards and reverses it. changes the global string
- * */
-void reverse(uint8_t length)
-{
-    uint8_t i = 0;
-    uint8_t j = length - 1; //hard coded length
-    uint8_t temp;
-
-    while(i<j){
-        temp = ascii_backwards[i];
-        ascii_backwards[i] = ascii_backwards[j];
-        ascii_backwards[j] = temp;
-        i++;
-        j--;
-    }
-}
-
- char intToStr(int value, int length)
-{
-    int i = 0;
-    while (value)
-    {
-        ascii_string_from_INT_STRING[i++] = (value%10) + '0';
-        value = value/10;
-    }
-    while (i < length)
-    {
-        ascii_string_from_INT_STRING[i++] = '0';
-    }
-    uint8_t index = 0;
-    for(index = 0; index < i; index++){
-        ascii_backwards[index] = ascii_string_from_INT_STRING[index];
-    }
-
-    reverse(10); //uses global variable
-    ascii_string_from_INT_STRING[i] = '\0';
-    return ascii_string_from_INT_STRING;
-}
-
-
+/* code written by Kevin Kuwata */
 
  char ftoa(float value)           //float to string function
 {

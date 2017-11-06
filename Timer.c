@@ -9,7 +9,6 @@
 #include "msp.h"
 #include "UART.h"
 
-extern  uint8_t direction;
 
 extern  uint8_t printout_Klee ;
 

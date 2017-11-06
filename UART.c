@@ -83,17 +83,20 @@ void UART_send_n_bytes(uint8_t *string){
 void Escooter_Printout(){
 
 
-    intToStr((int)distance, 10);
+    //intToStr((int)distance, 10);
+
+    ftoa(distance);
+
 
     /* -----------------------------  Distance Print Out   ----------------------------------*/
     /* --------------------------------------------------------------------------------------*/
     UART_send_n_bytes("Distance Traveled:  ");
-    UART_send_n_bytes(ascii_string_from_INT_STRING);
+    UART_send_n_bytes(ascii_backwards_float_int_portion);
     UART_send_n_bytes(" meters");
     UART_send_byte(13);
 
 
-    ftoa(639.78);
+    ftoa(velocity);
 
 
     /* -----------------------------  Velocity Print Out   ----------------------------------*/
@@ -178,13 +181,13 @@ void reverse(uint8_t length)
 
  char ftoa(float value)           //float to string function
 {
-//     if(value == 0){
-//          ascii_backwards_float_fraction_portion[0] = '0';
-//          ascii_backwards_float_fraction_portion[1] = '.';
-//          ascii_backwards_float_fraction_portion[2] = '0';
-//          ascii_backwards_float_fraction_portion[3] = '0';
-//          ascii_backwards_float_fraction_portion[4] = '0';
-//     }
+     if(value == 0){
+          ascii_backwards_float_fraction_portion[0] = '0';
+          ascii_backwards_float_fraction_portion[1] = '.';
+          ascii_backwards_float_fraction_portion[2] = '0';
+          ascii_backwards_float_fraction_portion[3] = '0';
+          ascii_backwards_float_fraction_portion[4] = '0';
+     }
 
      uint8_t number_of_integer_digits = 0; //use this to keep track for reversal
      uint8_t reversal_array[10];
@@ -214,12 +217,7 @@ void reverse(uint8_t length)
                 }
 
          //now we have the integer portion it needs to be swapped
-//         uint8_t index_for_reversal = 0;
-//         while(number_of_integer_digits != 0){
-//             ascii_backwards_float_int_portion[number_of_integer_digits-1] = reversal_array[index_for_reversal];
-//             index_for_reversal++;
-//             number_of_integer_digits--;
-//         }
+
 
        uint8_t copy_index = 0;
                for(copy_index =0; copy_index < number_of_integer_digits; copy_index++){

@@ -114,7 +114,6 @@ void main(void)
         movement_Detection();
 
 
-
         if (systickflag == 1 )
         {
             //disable

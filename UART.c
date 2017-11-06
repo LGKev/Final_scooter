@@ -93,7 +93,7 @@ void Escooter_Printout(){
     UART_send_byte(13);
 
 
-    ftoa(63.78);
+    ftoa(639.78);
 
 
     /* -----------------------------  Velocity Print Out   ----------------------------------*/
@@ -194,31 +194,40 @@ void reverse(uint8_t length)
 
      uint32_t value_fractional =( value - value_int ) * 1000; //3 decimal place precision
 
-     uint8_t index = 0;
-   while(value_int != 0){
-       reversal_array[index] = value_int%10 + '0';
-       index++;
-       number_of_integer_digits++;
-       value_int = value_int / 10;
-   }
-   //now we have the integer portion it needs to be swapped
-   uint8_t index_for_reversal = 0;
-   while(number_of_integer_digits != 0){
-       ascii_backwards_float_int_portion[number_of_integer_digits-1] = reversal_array[index_for_reversal];
-       index_for_reversal++;
-       number_of_integer_digits--;
-   }
-
-
-   //its zero now, so now we need to add a point
-       ascii_backwards_float_int_portion[index] = '.'; //add decimal //TODO: might be off by 1 place.
-       index++;
+     uint8_t index_overall = 0;
+       uint8_t index_for_fractional = 0;
        while(value_fractional !=0){
-           ascii_backwards_float_int_portion[index] = value_fractional % 10 + '0';
-           index++;
+           reversal_array[index_for_fractional] = value_fractional % 10 + '0';
+           index_for_fractional++;
+           number_of_integer_digits++;
            value_fractional = value_fractional / 10;
        }
-       ascii_backwards_float_int_portion[index] = '\0'; //don't you dare not terminate the string
+       //its zero now, so now we need to add a point
+           reversal_array[index_for_fractional] = '.'; //add decimal //TODO: might be off by 1 place.
+           index_for_fractional++;
+//lets get the numerical part, then reverse all at the end
+       while(value_int != 0){
+                    reversal_array[index_for_fractional] = value_int%10 + '0';
+                    index_for_fractional++;
+                    number_of_integer_digits++;
+                    value_int = value_int / 10;
+                }
+
+         //now we have the integer portion it needs to be swapped
+//         uint8_t index_for_reversal = 0;
+//         while(number_of_integer_digits != 0){
+//             ascii_backwards_float_int_portion[number_of_integer_digits-1] = reversal_array[index_for_reversal];
+//             index_for_reversal++;
+//             number_of_integer_digits--;
+//         }
+
+       uint8_t copy_index = 0;
+               for(copy_index =0; copy_index < number_of_integer_digits; copy_index++){
+                   ascii_backwards_float_int_portion[copy_index] = reversal_array[number_of_integer_digits - copy_index];
+               }
+
+       index_for_fractional++;
+       ascii_backwards_float_int_portion[index_for_fractional] = '\0'; //don't you dare not terminate the string
 
        __enable_irq();
 }

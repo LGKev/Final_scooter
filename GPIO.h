@@ -44,6 +44,11 @@
  void UART_RX_TX_Config();
 
 
+ /*     So we are setting up for back channel uart.
+  *
+  * */
+ void UART_RX_TX_Config_BackChannel();
+
  /*     @name: IR_Beam_Break_Config()
   *     @brief: Configure port for the IR Beam Break
   *        Photo Diode Pin: Port 2 pin 5

@@ -11,6 +11,7 @@ Timer.obj: C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/msp432p401r_class
 Timer.obj: C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/CMSIS/core_cm4.h
 Timer.obj: C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/CMSIS/cmsis_compiler.h
 Timer.obj: C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/system_msp432p401r.h
+Timer.obj: ../UART.h
 
 ../Timer.c: 
 ../Timer.h: 
@@ -23,3 +24,4 @@ C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/msp432p401r_classic.h:
 C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/CMSIS/core_cm4.h: 
 C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/CMSIS/cmsis_compiler.h: 
 C:/Users/kwat1/Documents/ccsv7/ccs_base/arm/include/system_msp432p401r.h: 
+../UART.h: 

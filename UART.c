@@ -10,6 +10,79 @@
 #include "string.h"
 #include "Clock.h"
 
+/*======================== Globals  ========================*/
+
+extern  float distance;
+extern  float velocity;
+extern  uint8_t direction;
+
+
+extern  uint8_t ascii_distance[10];         //creates an ascii string representation for distance
+extern uint8_t ascii_velocity[10];         //creates an ascii string representation for velocity
+
+extern uint8_t printout_Klee;
+extern uint32_t seconds; // counted with in the ISR for systick
+
+volatile char str[10];
+
+/*===========================================================*/
+
+void UART_Config2(){
+    /*  Steps for Setting up UART Table 22.3.1
+     *      Set UCSWRST
+     *      Initialize all registers with UCSWRT = 1
+     *      Configure Ports
+     *      Clear UCSWST with software, aka clear that 1.
+     *      Enable interrupts for UCRxie and UCTxie
+     *
+     *
+     * Resets as all 0's so only the clock sources is the
+     *  that need to be changed will change.
+     *
+     *  "Frame parameters" means the parity, stop bits, etc. but cuz all reset as 0's
+     *  no worries.
+     * */
+
+    //Set up pins.
+        //Pin 2 is the RX           pin 3 is the TX
+        //RX SETUP
+        P1SEL0 |= BIT2;
+        P1SEL1 &= ~BIT2;
+
+        //TX SETUP
+        P1SEL0 |= BIT3;
+        P1SEL1 &= ~BIT3;
+
+
+        // UART must be in reset mode to configure
+        EUSCI_A0->CTLW0 |= EUSCI_A_CTLW0_SWRST; //reset by setting to 1.
+
+
+        EUSCI_A0->IFG = 0b0; //CLEAR FLAGS WHILE RESET 1.
+
+
+
+
+        EUSCI_A0->CTLW0 |= EUSCI_A_CTLW0_SSEL__SMCLK; //frame parameter , enable interrupt on the RX
+        //baud rate clock is 4 Mhz
+        //what register is UCBR? it needs to be set as 26 is that the word one?
+        EUSCI_A0->BRW = 26; //baud rate, so baud rate set at 26 with other settings will result in a rate of 9600
+
+
+        // UCOS16 = 1,          UCbRx = 26;              UCBRF = 0 ;              UCBRSx = 0xB6
+        EUSCI_A0->MCTLW|=  (EUSCI_A_MCTLW_OS16); //from table 22.3.13
+
+        EUSCI_A0->MCTLW|= ((0xB600)) ;//| (EUSCI_A_MCTLW_OS16); //from table 22.3.13
+
+
+        // CLEAR UCSWRST
+        EUSCI_A0->CTLW0 &= ~EUSCI_A_CTLW0_SWRST;
+
+        //set up interrupt
+           EUSCI_A0->IE |= UCRXIE ;//BIT1 | EUSCI_A_IFG_RXIFG; // set up interrupt enable for both Rx and Tx.
+
+           NVIC_EnableIRQ(EUSCIA0_IRQn);
+}
 
 void UART_Config(){
     /* Pin Configuration
@@ -46,6 +119,7 @@ void UART_send_byte(uint8_t tx_data){
      EUSCI_A2->TXBUF = tx_data;             // be sure data is in ASCII
 }
 
+//:TODO change back to UARTA2
 void UART_send_n_bytes(uint8_t *string){
     uint32_t index =0;
     uint32_t length = strlen(string); //automatically calculate the length
@@ -53,8 +127,59 @@ void UART_send_n_bytes(uint8_t *string){
          UART_send_byte(string[index]);
      }
 }
-\
 
+
+void Escooter_Printout(){
+    char ascii_distance[10] ={0,0,0,0,0,0,0,0,0,0};         //creates an ascii string representation for distance
+    char ascii_velocity[10];         //creates an ascii string representation for velocity
+
+    //     ftoa(distance, ascii_distance, 3);         //converts distance number value to ascii string
+         ftoa(distance, 3);         //converts distance number value to ascii string
+
+//    ftoa(velocity, ascii_velocity, 3);         //converts velocity number value to ascii string
+
+    /* -----------------------------  Distance Print Out   ----------------------------------*/
+    /* --------------------------------------------------------------------------------------*/
+    UART_send_n_bytes("Distance Traveled:  ");
+    UART_send_n_bytes(ascii_distance);
+    UART_send_n_bytes(" meters");
+    UART_send_byte(13);
+
+    /* -----------------------------  Velocity Print Out   ----------------------------------*/
+    /* --------------------------------------------------------------------------------------*/
+    UART_send_n_bytes("Instantaneous Velocity: ");
+    UART_send_n_bytes(ascii_velocity);
+    UART_send_n_bytes(" meters/seconds");
+    UART_send_byte(13);
+
+    /* -----------------------------  Direction Print Out   ----------------------------------*/
+    /* ---------------------------------------------------------------------------------------*/
+    if(direction == 1){            /*-------- Forward --------- */
+    UART_send_n_bytes("Direction: Forward");
+    UART_send_byte(13);
+    }
+    if(direction == 0){            /*-------- Backward --------- */
+    UART_send_n_bytes("Direction: Backward");
+    UART_send_byte(13);
+    }
+    if(velocity == 0){                              /*-------- Condition if stopped --------- */
+    UART_send_n_bytes("Direction: Stopped");
+    UART_send_byte(13);
+    }
+
+    /* -----------------------------  Motion Print Out   ----------------------------------*/
+    /* ------------------------------------------------------------------------------------*/
+
+    if(velocity == 0){                              /*-------- Stationary --------- */
+    UART_send_n_bytes("Motion: Stopped");
+    UART_send_byte(13);
+    }
+    else{                                           /*-------- In Motion --------- */
+    UART_send_n_bytes("Motion: Moving");
+    UART_send_byte(13);
+    }
+
+}
 
 
 
@@ -109,8 +234,9 @@ void UART_send_n_bytes(uint8_t *string){
 
 }
 
- char ftoa(float f, char str[], int afterpoint)           //float to string function
+ char ftoa(float f, int afterpoint)           //float to string function
 {
+
     int ipart = (int)f;
 
     float fpart = f - (float)ipart;
@@ -125,6 +251,8 @@ void UART_send_n_bytes(uint8_t *string){
 
         intToStr((int)fpart, str + i + 1, afterpoint);
     }
+
+    return str;
 }
 
 /*============================================================================*/
@@ -157,3 +285,29 @@ extern void EUSCIA2_IRQHandler(){
     }
 }
 
+extern void EUSCIA0_IRQHandler(){
+    uint16_t delay;
+
+    if(EUSCI_A0->IFG & EUSCI_A_IFG_RXIFG){
+
+
+               EUSCI_A0->IFG &= ~EUSCI_A_IFG_RXIFG;//clear the flag.
+             //:TODO need to implement buffer
+             //  add_To_Buffer(&myBufferPTR, EUSCI_A2->RXBUF);
+
+
+
+
+               /*visual output to confirm RX */
+                       P2OUT = 0;
+                       P2OUT ^= BLUE_LED_UART_VISUAL; //vis
+                      for(delay =0; delay<200; delay++);
+                      P2OUT ^= BLUE_LED_UART_VISUAL;
+               /*end of visual output */
+}
+
+
+    if(EUSCI_A0->IFG & EUSCI_A_IFG_TXIFG){
+
+    }
+}

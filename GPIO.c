@@ -11,10 +11,10 @@
 
 /*====== Globals Related to Buffer  =======*/
 extern uint8_t dump_Buffer;
-extern volatile uint16_t systickflag;
-extern volatile uint32_t count_int;
-extern volatile uint16_t systick_int;
-extern volatile uint32_t seconds;
+extern  uint16_t systickflag;
+extern  uint32_t count_int;
+extern  uint16_t systick_int;
+extern  uint32_t seconds;
 
 
  void UART_RX_TX_Config(){
@@ -25,6 +25,16 @@ extern volatile uint32_t seconds;
     //TX SETUP
          P3SEL0 |= BIT3;
          P3SEL1 &= ~BIT3;
+ }
+
+ void UART_RX_TX_Config_BackChannel(){
+     //RX SETUP
+         P1SEL0 |= BIT2;
+         P1SEL1 &= ~BIT2;
+
+    //TX SETUP
+         P1SEL0 |= BIT3;
+         P1SEL1 &= ~BIT3;
  }
 
  void IR_Beam_Break_Config(){
@@ -133,7 +143,7 @@ void PORT2_IRQHandler(){
     if (P2IFG & BIT7){ // IR beam break
           count_int++;
           systick_int++; //interrupt count from the ir beam break
-         // P1->OUT ^= BIT0; //visual output
-       P2->IFG &= ~BIT7;
+          P1->OUT ^= BIT0; //visual output
+          P2->IFG &= ~BIT7;
       }
 }

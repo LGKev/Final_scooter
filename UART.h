@@ -22,6 +22,9 @@
 void UART_Config();
 
 
+void UART_Config2();
+
+
 /* @name: UART_send_byte
  * @brief: Sends a byte of data
  * @param: data: a uint8_t a number representing an ASCII value.
@@ -45,11 +48,19 @@ void UART_send_n_bytes(uint8_t *string);
  * */
 void EUSCIA2_IRQHandler();
 
+/*
+ *@name: Escooter_Printout
+ *@brief: Takes global data (distance, velocity, direction) and prints it via UART. No buffer required.
+ * @param: direction, velocity, distance are globals!
+ * */
+void Escooter_Printout();
+
+
 /*======================       Convert to ASCIII            ==============================*/
 void reverse(char str[], int len);
 int intToStr(int value, char str[], int length);
 char itoa(int value, char str[], int base);          //Integer to ASCII (should return ascii)
-char ftoa(float f, char str[], int point);         //Float to ASCII (should return ascii)
+char ftoa(float f, int point);         //Float to ASCII (should return ascii)
 
 
 

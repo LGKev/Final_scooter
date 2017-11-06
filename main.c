@@ -30,10 +30,11 @@
 /*===============   Globals    ======================*/
 /*===================================================*/
 
-/*====== Globals Related to Buffer  =======*/
-CircBuf_t myBuffer;
-CircBuf_t * myBufferPTR = &myBuffer;
-uint8_t dump_Buffer = 0;
+/*====== Globals Related to Asccii  =======*/
+volatile char ascii_backwards[10];
+volatile char ascii_string_from_INT_STRING[10];
+
+
 
 //:TODO find a better place to declare buffer
 

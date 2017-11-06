@@ -10,7 +10,6 @@
 
 
 /*====== Globals Related to Buffer  =======*/
-extern uint8_t dump_Buffer;
 extern  uint16_t systickflag;
 extern  uint32_t count_int;
 extern  uint16_t systick_int;
@@ -133,7 +132,6 @@ void PORT1_IRQHandler(){
             P1->IFG &= ~BIT1;
             //:TODO configure actions based on button presss
             TIMER_A0->CCR[0] = 4700;
-            dump_Buffer = 1;
 
         }
     if (P1IFG & BIT4){

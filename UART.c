@@ -23,7 +23,8 @@ extern uint8_t ascii_velocity[10];         //creates an ascii string representat
 extern uint8_t printout_Klee;
 extern uint32_t seconds; // counted with in the ISR for systick
 
-volatile char str[10];
+extern char ascii_backwards[10];
+extern char ascii_string_from_INT_STRING[10];
 
 /*===========================================================*/
 
@@ -130,18 +131,15 @@ void UART_send_n_bytes(uint8_t *string){
 
 
 void Escooter_Printout(){
-    char ascii_distance[10] ={0,0,0,0,0,0,0,0,0,0};         //creates an ascii string representation for distance
-    char ascii_velocity[10];         //creates an ascii string representation for velocity
 
-    //     ftoa(distance, ascii_distance, 3);         //converts distance number value to ascii string
-         ftoa(distance, 3);         //converts distance number value to ascii string
 
-//    ftoa(velocity, ascii_velocity, 3);         //converts velocity number value to ascii string
+    intToStr((int)distance, 10);
+
 
     /* -----------------------------  Distance Print Out   ----------------------------------*/
     /* --------------------------------------------------------------------------------------*/
     UART_send_n_bytes("Distance Traveled:  ");
-    UART_send_n_bytes(ascii_distance);
+    UART_send_n_bytes(ascii_string_from_INT_STRING);
     UART_send_n_bytes(" meters");
     UART_send_byte(13);
 
@@ -182,35 +180,45 @@ void Escooter_Printout(){
 }
 
 
-
 /*======================       Convert to ASCIII            ==============================*/
- void reverse(char str[], int len)        //function to reverse string to get it readable and not backwards
+/* @name: reverse
+ * @brief: takes in a global: ascii_backwards and reverses it. changes the global string
+ * */
+void reverse(uint8_t length)
 {
-    int start, end;
-    char temp;
-    for (start=0, end = len-1; start<end; start++, end--)
-    {
-        temp = *(str+start);
-        *(str+start)= *(str+end);
-        *(str+end) = temp;
+    uint8_t i = 0;
+    uint8_t j = length - 1; //hard coded length
+    uint8_t temp;
+
+    while(i<j){
+        temp = ascii_backwards[i];
+        ascii_backwards[i] = ascii_backwards[j];
+        ascii_backwards[j] = temp;
+        i++;
+        j--;
     }
 }
 
- int intToStr(int value, char str[], int length)
+ char intToStr(int value, int length)
 {
     int i = 0;
     while (value)
     {
-        str[i++] = (value%10) + '0';
+        ascii_string_from_INT_STRING[i++] = (value%10) + '0';
         value = value/10;
     }
     while (i < length)
     {
-        str[i++] = '0';
+        ascii_string_from_INT_STRING[i++] = '0';
     }
-    reverse(str,i);
-    str[i] = '\0';
-    return i;
+    uint8_t index = 0;
+    for(index = 0; index < i; index++){
+        ascii_backwards[index] = ascii_string_from_INT_STRING[index];
+    }
+
+    reverse(10); //uses global variable
+    ascii_string_from_INT_STRING[i] = '\0';
+    return ascii_string_from_INT_STRING;
 }
 
  char itoa (int value, char str[], int base)           //integer to string function
@@ -230,29 +238,29 @@ void Escooter_Printout(){
         str[i++] = '-';
     }
     str[i] = '\0';
-    reverse(str,i);
+    reverse(i);
 
 }
 
  char ftoa(float f, int afterpoint)           //float to string function
 {
 
-    int ipart = (int)f;
+//    int ipart = (int)f;
+//
+//    float fpart = f - (float)ipart;
+//
+//    int i = intToStr(ipart, str, 0);
+//
+//    if (afterpoint != 0)
+//    {
+//        str[i] = '.';
+//
+//        fpart = fpart * pow(10,afterpoint);
+//
+//        intToStr((int)fpart, str + i + 1, afterpoint);
+//    }
 
-    float fpart = f - (float)ipart;
-
-    int i = intToStr(ipart, str, 0);
-
-    if (afterpoint != 0)
-    {
-        str[i] = '.';
-
-        fpart = fpart * pow(10,afterpoint);
-
-        intToStr((int)fpart, str + i + 1, afterpoint);
-    }
-
-    return str;
+    return 'a';
 }
 
 /*============================================================================*/

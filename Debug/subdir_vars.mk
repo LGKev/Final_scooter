@@ -16,6 +16,7 @@ C_SRCS += \
 ../Timer.c \
 ../UART.c \
 ../adc_driver.c \
+../ascii_conversion.c \
 ../circ_buffer_basic.c \
 ../main.c \
 ../startup_msp432p401r_ccs.c \
@@ -29,6 +30,7 @@ C_DEPS += \
 ./Timer.d \
 ./UART.d \
 ./adc_driver.d \
+./ascii_conversion.d \
 ./circ_buffer_basic.d \
 ./main.d \
 ./startup_msp432p401r_ccs.d \
@@ -42,6 +44,7 @@ OBJS += \
 ./Timer.obj \
 ./UART.obj \
 ./adc_driver.obj \
+./ascii_conversion.obj \
 ./circ_buffer_basic.obj \
 ./main.obj \
 ./startup_msp432p401r_ccs.obj \
@@ -55,6 +58,7 @@ OBJS__QUOTED += \
 "Timer.obj" \
 "UART.obj" \
 "adc_driver.obj" \
+"ascii_conversion.obj" \
 "circ_buffer_basic.obj" \
 "main.obj" \
 "startup_msp432p401r_ccs.obj" \
@@ -68,6 +72,7 @@ C_DEPS__QUOTED += \
 "Timer.d" \
 "UART.d" \
 "adc_driver.d" \
+"ascii_conversion.d" \
 "circ_buffer_basic.d" \
 "main.d" \
 "startup_msp432p401r_ccs.d" \
@@ -81,6 +86,7 @@ C_SRCS__QUOTED += \
 "../Timer.c" \
 "../UART.c" \
 "../adc_driver.c" \
+"../ascii_conversion.c" \
 "../circ_buffer_basic.c" \
 "../main.c" \
 "../startup_msp432p401r_ccs.c" \

@@ -84,6 +84,7 @@ uint8_t * foo(uint32_t ** ptr)
  * lab 4
  * */
 
+//test commit
 void main(void)
     {
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;		// stop watchdog timer

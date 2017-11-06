@@ -52,16 +52,27 @@ extern  uint32_t seconds;
       * the buttons are a little different orders than the IR
       *
       * */
-     P2->SEL0 &= ~BIT7;
-     P2->SEL1 &= ~BIT7;
+//     P2->SEL0 &= ~BIT7;
+//     P2->SEL1 &= ~BIT7;
+//     //set up for pull down
+//     P2->DIR &= ~BIT7; //PIN 7 INPUT //this was set late, maybe it has to be set FIRST? -> vs DIR directly maybe that was it too
+//     P2->REN |= BIT7;
+//     P2->OUT &= ~BIT7;
+//     P2->IFG = 0x0;//~BIT7; //interrupt flag to be cleared first
+//     P2->IES |= BIT7; //high to low trigger, jordan has this as low to HIGH set 1.
+//     P2->IE |= BIT7;
+//       NVIC_EnableIRQ(PORT2_IRQn);
+
+     P6->SEL0 &= ~BIT6;
+     P6->SEL1 &= ~BIT6;
      //set up for pull down
-     P2->DIR &= ~BIT7; //PIN 7 INPUT //this was set late, maybe it has to be set FIRST? -> vs DIR directly maybe that was it too
-     P2->REN |= BIT7;
-     P2->OUT &= ~BIT7;
-     P2->IFG = 0x0;//~BIT7; //interrupt flag to be cleared first
-     P2->IES |= BIT7; //high to low trigger, jordan has this as low to HIGH set 1.
-     P2->IE |= BIT7;
-       NVIC_EnableIRQ(PORT2_IRQn);
+     P6->DIR &= ~BIT6; //PIN 7 INPUT //this was set late, maybe it has to be set FIRST? -> vs DIR directly maybe that was it too
+     P6->REN |= BIT6;
+     P6->OUT &= ~BIT6;
+     P6->IFG = 0x0;//~BIT7; //interrupt flag to be cleared first
+     P6->IES |= BIT6; //high to low trigger, jordan has this as low to HIGH set 1.
+     P6->IE |= BIT6;
+       NVIC_EnableIRQ(PORT6_IRQn);
  }
 
  void IR_Beam_Break_Config_JW(){
@@ -145,5 +156,14 @@ void PORT2_IRQHandler(){
           systick_int++; //interrupt count from the ir beam break
           P1->OUT ^= BIT0; //visual output
           P2->IFG &= ~BIT7;
+      }
+}
+
+void PORT6_IRQHandler(){
+    if (P6IFG & BIT6){ // IR beam break
+          count_int++;
+          systick_int++; //interrupt count from the ir beam break
+          P1->OUT ^= BIT0; //visual output
+          P6->IFG &= ~BIT6;
       }
 }

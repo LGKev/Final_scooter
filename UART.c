@@ -96,7 +96,12 @@ void Escooter_Printout(){
     /* -----------------------------  Velocity Print Out   ----------------------------------*/
     /* --------------------------------------------------------------------------------------*/
     UART_send_n_bytes("Instantaneous Velocity: ");
-    UART_send_n_bytes(ascii_backwards_float_int_portion);
+    if(velocity == 0){
+        UART_send_n_bytes("0.00");
+    }
+    else{
+        UART_send_n_bytes(ascii_backwards_float_int_portion);
+    }
     UART_send_n_bytes(" meters/seconds");
     UART_send_byte(13);
 
@@ -136,7 +141,7 @@ void Escooter_Printout(){
  char ftoa(float value)           //float to string function
 {
      if(value == 0.0){
-         ascii_backwards_float_int_portion[0] ='0';
+     ascii_backwards_float_int_portion[0] ='0';
      ascii_backwards_float_int_portion[1] = '.';
      ascii_backwards_float_int_portion[2] = '0';//termination
      ascii_backwards_float_int_portion[3] = '\0';

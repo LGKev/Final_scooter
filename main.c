@@ -35,6 +35,7 @@
 volatile char ascii_backwards_float_int_portion[10];
 volatile char ascii_backwards_float_fraction_portion[10];
 
+
 //:TODO find a better place to declare buffer
 
 /*====== Globals Related to Distance/Velocity  =======*/
@@ -88,6 +89,7 @@ void main(void)
     //IR_Beam_Break_Config_JW();
 
      UART_Config();
+     ADC_Accelerometer_Config();
 
 
     Timer_A0_Config(); //enabling timer with vector table forces port 1 interrupt to fail.
